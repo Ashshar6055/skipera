@@ -1,77 +1,65 @@
-# skipera
-<img width="96" height="96" alt="image" src="https://github.com/user-attachments/assets/8cf9428c-ef58-45b2-8fff-184ae353a890" />
+# Coursera-Bypass
 
-Module to facilitate skipping Coursera (https://www.coursera.org/) videos and assessments.
+**Coursera-Bypass** is a powerful automation tool designed to help you breeze through mandatory Coursera courses. It automatically handles video watching, reading materials, and even uses AI to solve assessments, saving you hours of repetitive work.
 
-## Why?
-Skipera assists in automatically skip irrelevant MOOC courses which are made mandatory by universities.
-Many of such courses are allotted directly by the university as credit fillers and are not in the interest of the student. The progress of the completion of these courses is tracked by the university and credits are allotted.
+## Features
 
-## How?
-Skipera makes use of the Coursera web API and completes the videos + reading materials.
-Graded assessments are completed with the assistance of an LLM API.
+- **Automated Video Watching**: Automatically marks videos as completed.
+- **Reading Material Skipping**: Instantly completes reading assignments.
+- **AI-Powered Quiz Solver**: Uses Gemini or Perplexity LLMs to solve graded and ungraded quizzes with high accuracy.
+- **Sequential Processing**: Follows the course syllabus strictly to handle prerequisites and locked items.
+- **Browser Cookie Integration**: Automatically fetches authentication cookies from your browser (Chrome, Firefox, or Edge).
+- **Draft Resumption**: Resumes existing quiz attempts seamlessly.
 
 ## Installation
 
-```bash
-pip install skipera
-```
+### Prerequisites
 
-Or install from source:
+- Python 3.10 or higher
+- A Google Gemini or Perplexity API key (optional, for quiz solving)
 
-```bash
-git clone https://github.com/serv0id/skipera
-cd skipera
-pip install .
-```
-
-## Configuration
-
-On first run, skipera creates a config file at `~/.skipera/config.json`.
-
-### Cookies (automatic)
-
-If you're logged into Coursera in your browser (Chrome, Firefox, or Edge), skipera will automatically fetch the required cookies. Just run the command and it handles the rest. Expired cookies are also re-fetched automatically.
-
-> **Note:** On Windows, Chrome must be closed for cookie fetching to work. On macOS, you may see a Keychain access prompt.
-
-### Cookies (manual)
-
-If automatic fetching doesn't work, you can manually add your cookies to the config file:
-
-```json
-{
-  "cookies": {
-    "CAUTH": "...",
-    "CSRF3-Token": "...",
-    "__204u": "..."
-  }
-}
-```
-
-To find your cookies, follow the instructions given at https://github.com/serv0id/skipera/issues/1.
-
-## Usage
+### Install via Pip
 
 ```bash
-skipera course-slug
+pip install coursera-bypass
 ```
 
-Where `course-slug` is from the Coursera URL. For example, if the URL is `https://www.coursera.org/learn/introduction-psychology/home/module/2`, run:
+### Install from Source
 
 ```bash
-skipera introduction-psychology
+git clone https://github.com/Ashshar6055/Coursera-Bypass.git
+cd Coursera-Bypass
+pip install -e .
 ```
 
-## LLM Support
+## Quick Start
 
-If you wish to solve graded assignments automatically, add your Perplexity or Gemini API key to the config file and use the `--llm` flag:
+1.  **Login**: Log into Coursera in your preferred web browser.
+2.  **Configure API Key**:
+    On first run, the tool creates a configuration file at `~/.coursera-bypass/config.json`. Add your Gemini API key there:
+    ```json
+    {
+      "gemini_api_key": "YOUR_API_KEY",
+      "cookies": {}
+    }
+    ```
+3.  **Run**:
+    Find the course slug (the part of the URL after `coursera.org/learn/`) and run:
+    ```bash
+    coursera-bypass course-slug --llm
+    ```
 
+## Example
+
+To bypass the "Introduction to Psychology" course:
 ```bash
-skipera introduction-psychology --llm
+coursera-bypass introduction-psychology --llm
 ```
 
-Note that an average 10 question assignment consumes ~5000 input tokens. If you wish to use another LLM through an API, please feel free to make a pull request or contact me.
+## Disclaimer
 
-Currently, only the single-choice and multiple-choice objective questions are supported in this mode. Note that you might
-not always achieve passing marks due to the LLM hallucinating sometimes.
+This tool is for educational purposes only. Use it responsibly and ensure you are complying with Coursera's Terms of Service.
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.

@@ -1,4 +1,4 @@
-# https://github.com/serv0id/skipera
+# https://github.com/Ashshar6055/Coursera-Bypass
 import time
 import requests
 from loguru import logger

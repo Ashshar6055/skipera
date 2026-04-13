@@ -3,7 +3,7 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "skipera"
+name = "coursera-bypass"
 version = "1.0.0"
 description = "Skip mandatory Coursera courses in seconds"
 readme = "README.md"
@@ -19,11 +19,11 @@ dependencies = [
 ]
 
 [project.scripts]
-skipera = "skipera.main:main"
+coursera-bypass = "coursera_bypass.main:main"
 
 [project.urls]
-Homepage = "https://github.com/serv0id/skipera"
-Issues = "https://github.com/serv0id/skipera/issues"
+Homepage = "https://github.com/Ashshar6055/Coursera-Bypass"
+Issues = "https://github.com/Ashshar6055/Coursera-Bypass/issues"
 
 [tool.setuptools.packages.find]
-include = ["skipera*"]
+include = ["coursera_bypass*"]
