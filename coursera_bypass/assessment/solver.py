@@ -8,7 +8,7 @@ from ..config import GRAPHQL_URL
 from .queries import (GET_STATE_QUERY, SAVE_RESPONSES_QUERY, SUBMIT_DRAFT_QUERY,
                       GRADING_STATUS_QUERY, INITIATE_ATTEMPT_QUERY)
 from loguru import logger
-from ..llm.connector import PerplexityConnector, GeminiConnector
+from ..llm.connector import PerplexityConnector, GeminiConnector, GroqConnector, FreeKeyConnector
 
 
 class GradedSolver(object):
@@ -51,16 +51,55 @@ class GradedSolver(object):
     def solve_assessment(self) -> None:
         """
         Main logic for retrieving questions, getting LLM answers, and submitting.
+        Uses free rotating keys first, then falls back to personal API keys.
         """
-        if config.PERPLEXITY_API_KEY:
-            connector = PerplexityConnector()
-        elif config.GEMINI_API_KEY:
-            connector = GeminiConnector()
-        else:
-            raise RuntimeError("No API Key specified.")
-
         questions = self.retrieve_questions()
-        answers = connector.get_response(questions)
+        if not questions:
+            logger.error("No questions retrieved. Skipping this assessment.")
+            return
+
+        answers = None
+        connector_name = None
+
+        # --- Strategy 1: Free rotating keys (primary) ---
+        if config.FREE_KEYS_ENABLED:
+            try:
+                connector = FreeKeyConnector()
+                answers = connector.get_response(questions)
+                connector_name = "FreeKey (rotating)"
+            except Exception as e:
+                logger.warning(f"FreeKeyConnector failed: {e}")
+                logger.info("Falling back to personal API keys...")
+
+        # --- Strategy 2: Personal API keys (fallback) ---
+        if answers is None:
+            personal_connectors = []
+            if config.GEMINI_API_KEY:
+                personal_connectors.append(("Gemini", GeminiConnector))
+            if config.GROQ_API_KEY:
+                personal_connectors.append(("Groq", GroqConnector))
+            if config.PERPLEXITY_API_KEY:
+                personal_connectors.append(("Perplexity", PerplexityConnector))
+
+            for name, ConnectorClass in personal_connectors:
+                try:
+                    logger.info(f"Trying {name} connector...")
+                    connector = ConnectorClass()
+                    answers = connector.get_response(questions)
+                    connector_name = name
+                    break
+                except Exception as e:
+                    logger.warning(f"{name} connector failed: {e}")
+                    continue
+
+        if answers is None:
+            logger.error(
+                "All connectors failed! No API keys worked. "
+                "Enable free_keys or add a personal API key to config."
+            )
+            return
+
+        logger.success(f"Got answers from {connector_name}")
 
         if not self.save_responses(answers["responses"]):
             logger.error("Could not save responses. Please file an issue.")

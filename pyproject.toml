@@ -20,6 +20,7 @@ dependencies = [
 
 [project.scripts]
 coursera-bypass = "coursera_bypass.main:main"
+skipera = "coursera_bypass.main:main"
 
 [project.urls]
 Homepage = "https://github.com/Ashshar6055/Coursera-Bypass"

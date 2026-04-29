@@ -123,12 +123,10 @@ class CourseraBypass(object):
             logger.info(f"    Reading: {item_name}")
             self.complete_item(item_id)
         elif type_name == "ungradedAssignment":
-            if self.llm:
-                logger.info(f"    Attempting to solve ungraded assessment: {item_name}")
-                solver = GradedSolver(self.session, self.course_id, item_id)
-                solver.solve()
-            else:
-                logger.info(f"    Skipping ungraded assignment: {item_name}")
+            # Always attempt ungraded assignments — they're required to unlock next modules
+            logger.info(f"    Solving ungraded assessment: {item_name}")
+            solver = GradedSolver(self.session, self.course_id, item_id)
+            solver.solve()
         elif type_name == "staffGraded":
             if self.llm:
                 logger.info(f"    Attempting to solve graded assessment: {item_name}")

@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Cloned free API keys repo (used for key rotation, not part of this project)
+free-llm-api-keys/
