@@ -1,6 +1,6 @@
-# Coursera-Bypass
+# Skipera
 
-**Coursera-Bypass** is a powerful automation tool designed to help you breeze through mandatory Coursera courses. It automatically handles video watching, reading materials, and even uses AI to solve assessments, saving you hours of repetitive work.
+**Skipera** is a powerful automation tool designed to help you breeze through mandatory Coursera courses. It automatically handles video watching, reading materials, and even uses AI to solve assessments, saving you hours of repetitive work.
 
 ## Features
 
